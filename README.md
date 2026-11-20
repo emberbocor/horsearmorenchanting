@@ -1,25 +1,91 @@
+# Horse Armor Enchanting
 
-Installation information
-=======
+Enchant your horse armor like your own armor, and the enchantments protect the horse that wears it.
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+In vanilla, horse armor cannot be enchanted at all. With Horse Armor Enchanting, leather, iron, golden and diamond horse armor take the armor enchantments at the enchanting table and the anvil, with the same costs, levels and conflicts as player armor. A horse wearing the enchanted armor gets the effect: it takes less damage, hurts what attacks it, falls softer, moves faster through water, freezes water under its hooves or runs faster on soul sand.
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+The mod runs on the server only. Players join with a plain vanilla client.
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+Available for NeoForge, Forge and Fabric.
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+## Features
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+Nine enchantments can go on horse armor. Each works for the horse like it works for a player:
+
+| Enchantment | Effect on the horse |
+|---|---|
+| Protection | Less damage from most sources. |
+| Fire Protection | Less fire and lava damage, and the horse burns for a shorter time. |
+| Blast Protection | Less explosion damage and less knockback from explosions. |
+| Projectile Protection | Less damage from arrows and other projectiles. |
+| Thorns | A mob or player that hits the horse may get hurt back. |
+| Feather Falling | Less fall damage. |
+| Depth Strider | The horse moves faster in water. |
+| Frost Walker | Water under the horse turns into frosted ice while it walks on the ground, and magma blocks and campfires do not hurt it. |
+| Soul Speed | The horse runs faster on soul sand and soul soil. |
+
+- **Enchanting table.** Put horse armor in the table like any other armor. It offers Protection, Fire Protection, Blast Protection, Projectile Protection, Feather Falling and Depth Strider.
+- **Anvil.** Combine horse armor with an enchanted book, or with another horse armor of the same kind that is enchanted. Thorns, Frost Walker and Soul Speed only come from books, as on boots.
+- **Nothing else.** Every other enchantment is refused, among them Unbreaking, Mending, Curse of Binding, Curse of Vanishing, Respiration, Aqua Affinity and Swift Sneak.
+- **No config, nothing to install on clients.**
+
+## How it works / limits
+
+- **Which armor.** Only the four horse armors of the game: leather, iron, golden and diamond. Wolf armor stays as it is in vanilla.
+- **Which animals.** Only horses wear horse armor. Donkeys, mules, zombie horses and skeleton horses cannot, as in vanilla.
+- **Same rules as player armor.** Enchantability of the material, level costs, the bookshelf bonus, the anvil cost and the prior work penalty, maximum levels and the conflicts between enchantments are the vanilla ones. The protection enchantments exclude each other, and Depth Strider and Frost Walker exclude each other.
+- **Boots enchantments from the body slot.** Feather Falling, Depth Strider, Frost Walker and Soul Speed are made for boots. On horse armor they work from the horse's armor slot, ridden or not.
+- **Riders are not protected.** The enchantments protect the horse only. When the horse lands from a big fall, the rider takes fall damage as in vanilla; the rider's own armor counts for that.
+- **No durability.** Horse armor never breaks, so the durability cost of Thorns and Soul Speed does not apply.
+- **No glint on the horse.** The armor item shows the enchantment glint and its enchantments in the tooltip, but the armor drawn on the horse has no glint. The vanilla client never draws a glint on horse armor, and the mod adds nothing on the client.
+- **Creative mode.** As with any item, a player in creative mode can put any enchantment on horse armor with the anvil.
+- **No messages.** The mod never shows text on screen.
+
+## Requirements
+
+| | NeoForge | Forge | Fabric |
+|---|---|---|---|
+| Minecraft | 1.21.1 | 1.21.1 | 1.21 or 1.21.1 |
+| Loader | NeoForge 21.1.1 or newer | Forge 52.0.0 or newer | Fabric Loader 0.15.11 or newer |
+| Fabric API | | | 0.102.0 or newer |
+| Jar | `horsearmorenchanting-neoforge-1.21.1-<version>.jar` | `horsearmorenchanting-forge-1.21.1-<version>.jar` | `horsearmorenchanting-fabric-1.21-1.21.1-<version>.jar` |
+
+On Minecraft 1.21.1, NeoForge and Forge are separate loaders that do not run each other's mods, so each has its own jar. Pick the jar that matches your server's loader. On Fabric, Fabric API is needed: it loads the item tags that come with the mod.
+
+### Client and server
+
+Install the mod on the server only, on every loader. It adds no items, blocks, entities, commands, network messages or registries. The enchanting table, the anvil, the tooltip and the glint of the item all work on a vanilla client, because the server sends the item tags and the enchantments to every client:
+
+- **NeoForge:** vanilla clients and NeoForge clients without the mod can join.
+- **Forge:** vanilla clients and Forge clients without the mod can join. The mod is marked as server-only, so a Forge client without it still shows the server as compatible in the server list.
+- **Fabric:** vanilla clients and Fabric clients without the mod can join.
+
+Installing it on a client as well does no harm.
+
+In singleplayer, install it in your own game; the built-in server runs it.
+
+## Configuration
+
+No configuration.
+
+## Compatibility
+
+- **Datapacks and mods that change enchantments.** The mod adds the four horse armors to the item tags `minecraft:enchantable/armor` and `minecraft:enchantable/foot_armor`, which are the supported items of the nine enchantments. It does not replace any enchantment file. So:
+  - a datapack that changes the costs, levels or effects of one of the nine enchantments changes it for horse armor too;
+  - a datapack that gives one of the nine enchantments other supported items takes it away from horse armor, unless the new list still includes those tags;
+  - an enchantment from a datapack or another mod that uses one of those two tags as its supported items can go on horse armor too;
+  - a datapack that replaces those two tags removes horse armor from them.
+- **Boots enchantments.** An enchantment that only works in the feet slot also works from the body armor slot of a mob. In survival, only horse armor can carry such enchantments, because only horse armor is added to the tags.
+- **Mods that change the anvil** may conflict. Combining two horse armors uses the mod's own copy of the vanilla anvil rules, because vanilla only combines two items of the same kind that have durability.
+
+## Building
+
+```
+./gradlew build
+```
+
+The jars are written to `neoforge/build/libs/`, `forge/build/libs/` and `fabric/build/libs/`.
+
+## License
+
+MIT.
