@@ -32,11 +32,11 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
         super(type, containerId, inventory, access, slotDefinition);
     }
 
-    // The first ItemStack#is(Item) call is the check where vanilla rejects two items of the same kind without durability.
+    // The first ItemStack#is(Item) call (is(Object) in bytecode, from TypedInstance) is the check where vanilla rejects two items of the same kind without durability.
     // NeoForge moves the vanilla logic of createResult into createResultInternal.
     @Inject(
             method = {"createResult", "createResultInternal"},
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z", ordinal = 0),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z", ordinal = 0),
             cancellable = true
     )
     private void horsearmorenchanting$combineHorseArmor(CallbackInfo ci) {

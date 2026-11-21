@@ -44,12 +44,12 @@ Nine enchantments can go on horse armor. Each works for the horse like it works 
 
 | | NeoForge | Forge | Fabric |
 |---|---|---|---|
-| Minecraft | 1.21.11 | 1.21.11 | 1.21.11 |
-| Loader | NeoForge 21.11.42 or newer | Forge 61.0.1 or newer | Fabric Loader 0.17.3 or newer |
-| Fabric API | | | 0.139.5 or newer |
-| Jar | `horsearmorenchanting-neoforge-1.21.11-<version>.jar` | `horsearmorenchanting-forge-1.21.11-<version>.jar` | `horsearmorenchanting-fabric-1.21.11-<version>.jar` |
+| Minecraft | 26.1 to 26.1.2 | 26.1 to 26.1.2 | 26.1 to 26.1.2 |
+| Loader | NeoForge 26.1.0.1-beta or newer | Forge 62.0.0 or newer | Fabric Loader 0.18.4 or newer |
+| Fabric API | | | 0.144.0 or newer |
+| Jar | `horsearmorenchanting-neoforge-26.1-26.1.2-<version>.jar` | `horsearmorenchanting-forge-26.1-26.1.2-<version>.jar` | `horsearmorenchanting-fabric-26.1-26.1.2-<version>.jar` |
 
-On Minecraft 1.21.11, NeoForge and Forge are separate loaders that do not run each other's mods, so each has its own jar. Pick the jar that matches your server's loader. On Fabric, Fabric API is needed: it loads the item tags that come with the mod.
+On Minecraft 26.1 to 26.1.2, NeoForge and Forge are separate loaders that do not run each other's mods, so each has its own jar. Pick the jar that matches your server's loader. On Fabric, Fabric API is needed: it loads the item tags that come with the mod.
 
 ### Client and server
 
