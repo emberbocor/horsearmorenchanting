@@ -6,6 +6,7 @@
   "mixins": [
     "AnimalArmorItemMixin",
     "AnvilMenuMixin",
+    "EnchantmentMenuMixin",
     "EnchantmentMixin"
   ],
   "injectors": {

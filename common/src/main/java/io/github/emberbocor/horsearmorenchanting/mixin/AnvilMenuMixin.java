@@ -40,7 +40,8 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
         ItemStack right = this.inputSlots.getItem(1);
         if (HorseArmorAnvil.isCombination(left, right)) {
             this.resultSlots.setItem(0, HorseArmorAnvil.combine(left, right, this.itemName, this.player, this.cost));
-            this.broadcastChanges();
+            // A client without the mod computes no result and cost 0 for this pair, so send the server's values even when unchanged.
+            this.sendAllDataToRemote();
             ci.cancel();
         }
     }

@@ -74,7 +74,7 @@ No configuration.
   - a datapack that changes the costs, levels or effects of one of the nine enchantments changes it for horse armor too;
   - a datapack that gives one of the nine enchantments other supported items takes it away from horse armor, unless the new list still includes those tags;
   - an enchantment from a datapack or another mod that uses one of those two tags as its supported items can go on horse armor too;
-  - a datapack that replaces those two tags removes horse armor from them.
+  - a datapack that replaces both tags without horse armor removes horse armor from them; the enchanting table then still takes horse armor but offers nothing. Replacing only `minecraft:enchantable/armor` with its vanilla list keeps horse armor in it, because that list includes `minecraft:enchantable/foot_armor`.
 - **Boots enchantments.** An enchantment that only works in the feet slot also works from the body armor slot of a mob. In survival, only horse armor can carry such enchantments, because only horse armor is added to the tags.
 - **Mods that change the anvil** may conflict. Combining two horse armors uses the mod's own copy of the vanilla anvil rules, because vanilla only combines two items of the same kind that have durability.
 
