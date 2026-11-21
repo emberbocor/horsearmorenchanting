@@ -4,10 +4,10 @@
   "package": "io.github.emberbocor.horsearmorenchanting.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "AnimalArmorItemMixin",
     "AnvilMenuMixin",
     "EnchantmentMenuMixin",
-    "EnchantmentMixin"
+    "EnchantmentMixin",
+    "ItemPropertiesMixin"
   ],
   "injectors": {
     "defaultRequire": 1

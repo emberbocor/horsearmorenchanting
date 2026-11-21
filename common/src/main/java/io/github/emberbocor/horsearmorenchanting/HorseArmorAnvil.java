@@ -8,7 +8,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AnvilMenu;
-import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -19,12 +18,15 @@ public final class HorseArmorAnvil {
     private HorseArmorAnvil() {
     }
 
+    public record Result(ItemStack stack, int cost, boolean onlyRenaming) {
+    }
+
     public static boolean isCombination(ItemStack left, ItemStack right) {
         return HorseArmorEnchanting.isHorseArmor(left) && right.is(left.getItem());
     }
 
     // Vanilla AnvilMenu#createResult for two items of the same kind, without the durability part: horse armor has none.
-    public static ItemStack combine(ItemStack left, ItemStack right, @Nullable String itemName, Player player, DataSlot cost) {
+    public static Result combine(ItemStack left, ItemStack right, @Nullable String itemName, Player player) {
         ItemStack result = left.copy();
         ItemEnchantments.Mutable enchantments = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(result));
         long baseCost = (long) left.getOrDefault(DataComponents.REPAIR_COST, 0) + right.getOrDefault(DataComponents.REPAIR_COST, 0);
@@ -38,7 +40,7 @@ public final class HorseArmorAnvil {
             int current = enchantments.getLevel(holder);
             int level = entry.getIntValue();
             level = current == level ? level + 1 : Math.max(level, current);
-            boolean allowed = left.is(enchantment.definition().supportedItems()) || player.getAbilities().instabuild;
+            boolean allowed = left.is(enchantment.definition().supportedItems()) || player.hasInfiniteMaterials();
 
             for (Holder<Enchantment> other : enchantments.keySet()) {
                 if (!other.equals(holder) && !Enchantment.areCompatible(holder, other)) {
@@ -61,8 +63,7 @@ public final class HorseArmorAnvil {
         }
 
         if (rejected && !applied) {
-            cost.set(0);
-            return ItemStack.EMPTY;
+            return new Result(ItemStack.EMPTY, 0, false);
         }
 
         int renameCost = 0;
@@ -78,22 +79,23 @@ public final class HorseArmorAnvil {
             result.remove(DataComponents.CUSTOM_NAME);
         }
 
-        cost.set((int) Mth.clamp(baseCost + price, 0L, Integer.MAX_VALUE));
+        int cost = price <= 0 ? 0 : (int) Mth.clamp(baseCost + price, 0L, Integer.MAX_VALUE);
         if (price <= 0) {
             result = ItemStack.EMPTY;
         }
 
-        if (renameCost == price && renameCost > 0 && cost.get() >= 40) {
-            cost.set(39);
+        boolean onlyRenaming = renameCost == price && renameCost > 0;
+        if (onlyRenaming && cost >= 40) {
+            cost = 39;
         }
 
-        if (cost.get() >= 40 && !player.getAbilities().instabuild) {
+        if (cost >= 40 && !player.hasInfiniteMaterials()) {
             result = ItemStack.EMPTY;
         }
 
         if (!result.isEmpty()) {
             int repairCost = Math.max(result.getOrDefault(DataComponents.REPAIR_COST, 0), right.getOrDefault(DataComponents.REPAIR_COST, 0));
-            if (renameCost != price || renameCost == 0) {
+            if (!onlyRenaming) {
                 repairCost = AnvilMenu.calculateIncreasedRepairCost(repairCost);
             }
 
@@ -101,6 +103,6 @@ public final class HorseArmorAnvil {
             EnchantmentHelper.setEnchantments(result, enchantments.toImmutable());
         }
 
-        return result;
+        return new Result(result, cost, onlyRenaming);
     }
 }
