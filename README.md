@@ -71,6 +71,7 @@ No configuration.
 ## Compatibility
 
 - **Enchantments from other mods.** Horse armor takes an enchantment when boots take it by its category (armor or boots enchantments). An enchantment from another mod in one of those categories can go on horse armor too; one that checks the item in its own way does not.
+- **Horse armor forced on by commands.** Frost Walker and Soul Speed work from the armor slot of any horse-like animal that wears one of the four horse armors. In survival only horses can wear them; a donkey, mule or llama only gets one through commands or NBT (for example `/summon` with `ArmorItems`), and then those enchantments work for it too.
 - **Mods that change the anvil** may conflict. Combining two horse armors uses the mod's own copy of the vanilla anvil rules, because vanilla only combines two items of the same kind that have durability.
 
 ## Building
