@@ -1,6 +1,7 @@
 package io.github.emberbocor.horsearmorenchanting.mixin;
 
 import io.github.emberbocor.horsearmorenchanting.HorseArmorAnvil;
+import io.github.emberbocor.horsearmorenchanting.HorseArmorEnchanting;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -29,10 +30,10 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
         super(type, containerId, playerInventory, access);
     }
 
-    // The first ItemStack#is(Item) call is the check where vanilla rejects two items of the same kind without durability.
+    // The first isDamageableItem() call is the repair check, reached only with a second item, after the book check.
     @Inject(
             method = "createResult",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z", ordinal = 0),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z", ordinal = 0),
             cancellable = true
     )
     private void horsearmorenchanting$combineHorseArmor(CallbackInfo ci) {
@@ -40,9 +41,16 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
         ItemStack right = this.inputSlots.getItem(1);
         if (HorseArmorAnvil.isCombination(left, right)) {
             this.resultSlots.setItem(0, HorseArmorAnvil.combine(left, right, this.itemName, this.player, this.cost));
-            // A client without the mod computes no result and cost 0 for this pair, so send the server's values even when unchanged.
             this.sendAllDataToRemote();
             ci.cancel();
+        }
+    }
+
+    // A client without the mod rejects every enchantment on horse armor and computes no result and cost 0, so send the server's values even when unchanged.
+    @Inject(method = "createResult", at = @At("RETURN"))
+    private void horsearmorenchanting$resendResult(CallbackInfo ci) {
+        if (HorseArmorEnchanting.isHorseArmor(this.inputSlots.getItem(0))) {
+            this.sendAllDataToRemote();
         }
     }
 }

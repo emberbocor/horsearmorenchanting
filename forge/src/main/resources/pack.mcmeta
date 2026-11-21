@@ -1,10 +1,6 @@
 {
   "pack": {
-    "description": "Horse Armor Enchanting resources and data",
-    "pack_format": 48,
-    "supported_formats": {
-      "min_inclusive": 34,
-      "max_inclusive": 48
-    }
+    "description": "Horse Armor Enchanting resources",
+    "pack_format": 15
   }
 }
